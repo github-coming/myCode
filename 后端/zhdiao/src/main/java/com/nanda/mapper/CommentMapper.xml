@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.nanda.dao.CommentDao">
+    <resultMap id="comm" type="comment">
+        <id column="commentId" property="commentId"/>
+        <result column="commentContent" property="commentContent"/>
+        <result column="commentTime" property="commentTime"/>
+        <result column="questionId" property="questionId"/>
+        <association property="user" javaType="com.nanda.vo.User">
+            <id column="userId" property="userId"/>
+            <result column="userName" property="userName"/>
+        </association>
+    </resultMap>
+    <select id="queryAllComment" parameterType="map" resultMap="comm">
+        select comment_id as 'commentId',
+        comment_content as 'commentContent',
+        comment_time as 'commentTime',
+        question_id as 'questionId',
+        c.user_id as 'userId',
+        user_name as 'userName'
+        from
+        comment c
+        left join
+        user u
+        on
+        c.user_id=u.user_id
+        where
+        question_id=#{questionId}
+    </select>
+
+    <insert id="insertComment" parameterType="comment">
+        insert into
+        comment (comment_content,comment_time,question_id,user_id)
+        values (#{commentContent},#{commentTime},#{questionId},#{userId})
+    </insert>
+
+    <update id="updatecomments" parameterType="int">
+        update user_question set comments=comments+1 where question_id=#{questionId}
+    </update>
+</mapper>

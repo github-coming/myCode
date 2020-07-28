@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.nanda.dao.FansDao">
+    <select id="queryNumberByUserId" parameterType="int" resultType="int">
+        select count(*) from fans where user_id=#{userId}
+    </select>
+
+    <select id="queryNumberByIdolId" parameterType="int" resultType="int">
+        select count(*) from fans where idol_id=#{idolId}
+    </select>
+
+    <select id="querygzUser" parameterType="int" resultType="user">
+        select idol_id as 'userId',
+        user_name as 'userName'
+        from
+        fans f
+        left join
+        user u
+        on
+        f.idol_id = u.user_id
+        where
+        f.user_id=#{userId}
+    </select>
+    <select id="queryfsUser" parameterType="int" resultType="user">
+        select f.user_id as 'userId',
+        user_name as 'userName'
+        from
+        fans f
+        left join
+        user u
+        on
+        f.user_id = u.user_id
+        where
+        f.idol_id=#{idolId}
+    </select>
+
+    <insert id="insertFans" parameterType="fans">
+        insert into
+        fans (user_id,idol_id)
+        values (#{userId},#{idolId})
+    </insert>
+</mapper>
